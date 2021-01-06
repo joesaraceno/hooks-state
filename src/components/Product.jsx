@@ -1,11 +1,5 @@
 import React, { useContext } from 'react';
-// import CartReducer from '../state/CartReducer';
-import { store } from '../state/CartStore';
-
-const CURRENCY_OPTIONS = {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-}
+import { store, getTotal } from '../state/CartStore';
 
 const products = [
   {
@@ -25,23 +19,16 @@ const products = [
   }
 ]
 
-function getTotal (cart) {
-  const total = cart.state.reduce((totalCost, item ) => totalCost + item.price, 0);
-  return total.toLocaleString(undefined, CURRENCY_OPTIONS);
-}
-
-
-
 export default function Product() {
   const cart = useContext(store);
   const { dispatch } = cart;
 
   function add(product) {
-    dispatch({ payload: { ...product }, type:'ADD' });
+    dispatch({ payload: { ...product }, type: 'ADD' });
   }
   
   function remove(product) {
-    dispatch({ payload: { ...product }, type:'REMOVE' });
+    dispatch({ payload: { ...product }, type: 'REMOVE' });
   }
 
   function empty() {
@@ -50,9 +37,8 @@ export default function Product() {
 
   return (
     <div>
-      {/* {JSON.stringify(cart)} */}
       <div>
-        Shopping Cart #1: {cart.state.length} items. 
+        Shopping Cart #1: {cart.state.items.length} items. 
       </div>
       <div>Total: { getTotal(cart) }</div>
       <div>
@@ -69,7 +55,7 @@ export default function Product() {
             )
           })
         }
-        <button onClick={() => empty()}>empty Cart</button>
+        <button onClick={() => empty()}>Empty Cart</button>
       </div>
     </div>
   );

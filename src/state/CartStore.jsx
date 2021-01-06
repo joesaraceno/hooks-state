@@ -1,7 +1,12 @@
 import React, { createContext, useReducer } from 'react';
 import CartReducer from './CartReducer';
 
-const initialState = [];
+const CURRENCY_OPTIONS = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+}
+
+const initialState = { items: [] };
 const store = createContext(initialState);
 
 const { Provider } = store;
@@ -11,4 +16,9 @@ function CartProvider  ( { children } )  {
   return <Provider value={{ state, dispatch }}>{children}</Provider>
 }
 
-export { store, CartProvider }
+function getTotal () {
+  const total = store._currentValue.state.items.reduce((totalCost, item ) => totalCost + item.price, 0);
+  return total.toLocaleString(undefined, CURRENCY_OPTIONS);
+}
+
+export { store, getTotal, CartProvider }
